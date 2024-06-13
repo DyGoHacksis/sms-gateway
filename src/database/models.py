@@ -21,7 +21,7 @@ def insert_initial_values(*args, **kwargs):
 
 class inbox(Base):
     __tablename__ = 'inbox'
-    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=datetime.utcnow)
+    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())
     ReceivingDateTime = Column(TIMESTAMP, nullable=False, server_default=func.now())
     Text = Column(TEXT, nullable=False)
     SenderNumber = Column(String(20), nullable=False, server_default='')
@@ -58,7 +58,7 @@ class inbox(Base):
 
 class outbox(Base):
     __tablename__ = 'outbox'
-    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=datetime.utcnow)
+    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())
     InsertIntoDB = Column(TIMESTAMP, nullable=False, server_default=func.now())
     SendingDateTime = Column(TIMESTAMP, nullable=False, server_default=func.now())
     SendBefore = Column(Time, nullable=False, server_default='23:59:59')
@@ -131,7 +131,7 @@ class outbox_multipart(Base):
 class phones(Base):
     __tablename__ = 'phones'
     ID = Column(TEXT, nullable=False)
-    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=datetime.utcnow)
+    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())
     InsertIntoDB = Column(TIMESTAMP, nullable=False, server_default=func.now())
     TimeOut = Column(TIMESTAMP, nullable=False, server_default=func.now())
     Send = Column(mysql.ENUM('yes','no'), nullable=False, server_default='no')
@@ -149,7 +149,7 @@ class phones(Base):
 
 class sentitems(Base):
     __tablename__ = 'sentitems'
-    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=datetime.utcnow)
+    UpdatedInDB = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())
     InsertIntoDB = Column(TIMESTAMP, nullable=False, server_default=func.now())
     SendingDateTime = Column(TIMESTAMP, nullable=False, server_default=func.now())
     DeliveryDateTime = Column(TIMESTAMP, nullable=True)
