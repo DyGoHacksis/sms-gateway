@@ -13,7 +13,9 @@ cat > $GAMMU_SMSD_CONF <<EOL
 # Gammu library configuration, see gammurc(5)
 [gammu]
 device = ${GAMMU_DEVICE}
+port = ${GAMMU_DEVICE}
 connection = ${GAMMU_DEVICE_CONNECTION}
+synchronizetime = yes
 
 # SMSD configuration, see gammu-smsdrc(5)
 [smsd]
@@ -25,8 +27,10 @@ User = ${MYSQL_USERNAME}
 Password = ${MYSQL_PASSWORD}
 Database = ${MYSQL_DATABASE}
 Sql = mysql
+CommTimeout = 5
 
 logfile = /dev/stdout
+logformat = textdate
 debuglevel = ${GAMMU_DEBUG_LEVEL}
 
 EOL
