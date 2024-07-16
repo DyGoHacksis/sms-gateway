@@ -33,7 +33,7 @@ class SendSMS(Resource):
             # Create SMS info structure
             smsinfo = {
                 'Class': -1,
-                'Unicode': True,
+                'Unicode': not message.isascii(),
                 'Entries':  [
                     {
                         'ID': 'ConcatenatedTextLong',
