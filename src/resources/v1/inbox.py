@@ -35,33 +35,39 @@ class Inbox(Resource):
         limit = request.args.get('limit')
         per_page = int(request.args.get('per_page')) if request.args.get('per_page') else 50
         page = int(request.args.get('page')) if request.args.get('page') else 1
+        try:
+            query = db_session.query(inbox)
+            query = query.filter()
 
-        query = db_session.query(inbox)
-        query = query.filter()
+            if(before):
+                query = query.filter(inbox.ReceivingDateTime < before)
+            if(after):
+                query = query.filter(inbox.ReceivingDateTime > after)
+            if(sender):
+                query = query.filter(inbox.SenderNumber == sender)
+            total_records = query.count()
+            total_pages = ceil(total_records/per_page)
+            if(per_page):
+                query = query.limit(per_page)
+            if(page):
+                query = query.offset((page-1)*per_page)
 
-        if(before):
-            query = query.filter(inbox.ReceivingDateTime < before)
-        if(after):
-            query = query.filter(inbox.ReceivingDateTime > after)
-        if(sender):
-            query = query.filter(inbox.SenderNumber == sender)
-        total_records = query.count()
-        total_pages = ceil(total_records/per_page)
-        if(per_page):
-            query = query.limit(per_page)
-        if(page):
-            query = query.offset((page-1)*per_page)
+            records = query.all()
+            results = []
+            for record in records:
+                results.append(record.as_json())
 
-        records = query.all()
-        results = []
-        for record in records:
-            results.append(record.as_json())
+            return {
+                'page': page,
+                'total_pages': total_pages,
+                'results': results
+            }, 200
 
-        return {
-            'page': page,
-            'total_pages': total_pages,
-            'results': results
-        }, 200
+        except Exception:
+            db_session.rollback()
+            raise
+        finally:
+           db_session.close()
 
 @ns.route('/v1/inbox/<int:id>')
 class InboxID(Resource):
