@@ -29,7 +29,7 @@ Database = ${MYSQL_DATABASE}
 Sql = mysql
 CommTimeout = 5
 
-logfile = /dev/stdout
+logfile = ${GAMMU_LOG_FILE}
 logformat = textdate
 debuglevel = ${GAMMU_DEBUG_LEVEL}
 
