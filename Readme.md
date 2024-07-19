@@ -100,6 +100,11 @@ $ docker-compose up -d
     description     : Log level for gammu-smsd
     more            : https://wammu.eu/docs/manual/smsd/config.html#option-DebugLevel
 
+#### GAMMU_LOG_FILE
+    default value   : "/dev/stdout"
+    description     : Log file path for gammu-smsd
+    more            : https://docs.gammu.org/smsd/config.html#option-LogFile
+
 #### MYSQL_HOST
     default value   : "localhost"
     description     : Database server address
