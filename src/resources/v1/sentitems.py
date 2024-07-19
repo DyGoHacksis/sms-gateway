@@ -35,33 +35,39 @@ class SendItems(Resource):
         limit = request.args.get('limit')
         per_page = int(request.args.get('per_page')) if request.args.get('per_page') else 50
         page = int(request.args.get('page')) if request.args.get('page') else 1
+        try:
+            query = db_session.query(sentitems)
+            query = query.filter()
+    
+            if(before):
+                query = query.filter(sentitems.ReceivingDateTime < before)
+            if(after):
+                query = query.filter(sentitems.ReceivingDateTime > after)
+            if(destination):
+                query = query.filter(sentitems.DestinationNumber == destination)
+            total_records = query.count()
+            total_pages = ceil(total_records/per_page)
+            if(per_page):
+                query = query.limit(per_page)
+            if(page):
+                query = query.offset((page-1)*per_page)
+    
+            records = query.all()
+            results = []
+            for record in records:
+                results.append(record.as_json())
+    
+            return {
+                'page': page,
+                'total_pages': total_pages,
+                'results': results
+            }, 200
 
-        query = db_session.query(sentitems)
-        query = query.filter()
-
-        if(before):
-            query = query.filter(sentitems.ReceivingDateTime < before)
-        if(after):
-            query = query.filter(sentitems.ReceivingDateTime > after)
-        if(destination):
-            query = query.filter(sentitems.DestinationNumber == destination)
-        total_records = query.count()
-        total_pages = ceil(total_records/per_page)
-        if(per_page):
-            query = query.limit(per_page)
-        if(page):
-            query = query.offset((page-1)*per_page)
-
-        records = query.all()
-        results = []
-        for record in records:
-            results.append(record.as_json())
-
-        return {
-            'page': page,
-            'total_pages': total_pages,
-            'results': results
-        }, 200
+        except Exception:
+            db_session.rollback()
+            raise
+        finally:
+           db_session.close()
 
 @ns.route('/v1/sentitems/<int:id>')
 class SendItemsID(Resource):
